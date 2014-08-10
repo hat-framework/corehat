@@ -1,0 +1,13 @@
+{
+    "name": "hat/corehat",
+    "description": null,
+    "authors": [
+        {
+            "name": "Thompson Filgueiras",
+            "email": "thom@thomfilg.com"
+        }
+    ],
+    "require": {
+
+    }
+}
