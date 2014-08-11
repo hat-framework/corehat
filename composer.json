@@ -1,13 +1,16 @@
 {
     "name": "hat/corehat",
-    "description": null,
+    "description": "",
     "authors": [
         {
             "name": "Thompson Filgueiras",
             "email": "thom@thomfilg.com"
         }
     ],
-    "require": {
-
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "4.1.*",
+        "phpunit/dbunit": ">=1.2",
+        "phpunit/php-invoker": "*"
     }
 }

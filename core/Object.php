@@ -48,7 +48,7 @@ class Object{
      */
     public function appendSuccessMessage($msg, $glue = "<br/>"){
         $this->appendMessage("success", $msg, $glue);
-        return false;
+        return true;
     }
     
     /**
@@ -181,16 +181,20 @@ class Object{
       * @param string $unset se true, apaga a mensagem
       * @return string
       */
-     public function getAlertMessage(){
+     public function getAlertMessage($unset = false){
+         $var = "";
      	 if(is_array($this->object_msg)){
              if(array_key_exists("alert", $this->object_msg)){
-                return $this->object_msg['alert'];
+                $var = $this->object_msg['alert'];
              }
          }
+         if($unset) {$this->unsetMessage('alert');}
+         return $var;
      }
 
     /**
     * @abstract array contendo todas as mensagens
+    * @param string $clear se true, apaga as mensagens
     * @return array
     */
     public function getMessages($clear = false){
@@ -210,11 +214,16 @@ class Object{
         return get_called_class();
     }
 
-    
-    
+    /**
+    * @abstract Create local error log and set error message
+    * @param string $msg Error Message to be saved in log and setted
+    * @param string $logname file name where log will be saved
+    * @param array $aditionalError aditional errors to be concatenated
+    * @return false
+    */
     protected function LogError($msg, $logname = "", $aditionalError = array()){
         if($logname !== "") {
-            \classes\Utils\Log::save($logname, $msg);
+            Log::save($logname, $msg);
             if(!empty($aditionalError)){
                 $this->setMessages($aditionalError);
                 \classes\Utils\Log::save($logname, $aditionalError);
@@ -223,7 +232,14 @@ class Object{
         return $this->setErrorMessage($msg);
     }
     
-    public function propagateMessage($obj, $method){
+    /**
+    * @abstract Set errors and alerts messages if the called method return false
+    * @param \corehat\core\Object $obj 
+    * @param string $method method name to be called
+    * @param mixed $aditional_param One or more params if called method needs
+    * @return false if method return false, true other wise
+    */
+    public function propagateMessage(\corehat\core\Object $obj, $method){
         $args = func_get_args();
         array_shift($args);
         array_shift($args);
